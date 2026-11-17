@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GVT-EA5---Kamerabewegung---Fabian-Meintzer/</title>
+
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+
+<script src="js/mat4.js"></script>
+<script src="js/vertexDataPlane.js"></script>
+<script src="js/vertexDataTorus.js"></script>
+<script src="js/vertexDataSphere.js"></script>
+<script src="js/app.js"></script>
+
+<script type="x-shader/x-vertex" id="vertexshader">
+  attribute vec3 aPosition;
+  attribute vec3 aNormal;
+  attribute vec3 aColor;
+
+  uniform mat4 uPMatrix;
+  uniform mat4 uMVMatrix;
+
+  varying vec3 vColor;
+
+  void main() {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aPosition, 1.0);
+    float shade = 0.70 + 0.30 * (aNormal.y * 0.5 + 0.5);
+    vColor = aColor * shade;
+  }
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+  precision mediump float;
+
+  varying vec3 vColor;
+
+  void main() {
+    gl_FragColor = vec4(vColor, 1.0);
+  }
+</script>
+</head>
+<body onload="app.start()">
+
+<h1>Graphical Visualisation Technologies - EA5: <br> Kamerabewegung</h1>
+
+<div class="bereich">
+  <div class="flex" style="display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start;">
+
+    <div style="flex:0 0 700px;">
+      <canvas id="canvas" width="500" height="500"></canvas>
+
+      <div id="webgl-error" class="notice" hidden></div>
+
+      <div class="gruppe" style="margin-top:12px; white-space:nowrap;">
+        <span class="label">Ansicht:</span>
+        <button id="btnDrehenLinks" class="knopf" onclick="app.drehen(-1)">&#8592; drehen</button>
+        <button id="btnDrehenRechts" class="knopf" onclick="app.drehen(1)">drehen &#8594;</button>
+        <button id="btnHoehePlus" class="knopf" onclick="app.hoehe(1)">Höhe +</button>
+        <button id="btnHoeheMinus" class="knopf" onclick="app.hoehe(-1)">Höhe -</button>
+        <button id="btnNaeher" class="knopf" onclick="app.zoom(-1)">näher</button>
+        <button id="btnWeiter" class="knopf" onclick="app.zoom(1)">weiter</button>
+        <button id="btnKameraReset" class="knopf" onclick="app.resetView()">zurücksetzen</button>
+      </div>
+
+      <div class="gruppe">
+        <span class="label">Darstellung:</span>
+        <button id="btnWire" class="knopf" onclick="app.selectMode('wireframe')">Linien</button>
+        <button id="btnFill" class="knopf" onclick="app.selectMode('fill')">Füllung</button>
+        <button id="btnBoth" class="knopf" onclick="app.selectMode('fillwireframe')">Füllung + Linien</button>
+      </div>
+
+      <div class="gruppe">
+        <span class="label">Rekursion:</span>
+        <button id="btnTiefeMinus" class="knopf" onclick="app.selectDepth(-1)">Tiefe -</button>
+        <button id="btnTiefePlus" class="knopf" onclick="app.selectDepth(1)">Tiefe +</button>
+      </div>
+
+      <p class="klein">Tipp: Mit den Pfeiltasten lässt sich die Kamera um die Szene
+      drehen (links/rechts) und in der Höhe verändern (hoch/runter), <b>N</b>
+      vergrößert den Kameraabstand, <b>Shift + N</b> verkleinert ihn und die Taste
+      <b>R</b> setzt die Kamera zurück. 
+      <br> 
+      <br>
+      PS: Letzte Abgabe vor GTA VI! Frohes Zocken allen!</p>
+      
+    </div>
+
+    <div id="info" style="flex:1 1 340px; min-width:320px; max-width:560px;"></div>
+
+  </div>
+</div>
+
+<footer>
+    <p>Erstellt von Fabian Meintzer in Brandenburg an der Havel</p>
+</footer>
+
+</body>
+</html>
